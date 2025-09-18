@@ -187,9 +187,29 @@ console.log(filterWords(["house", "car", "watch", "table"], "catboulerham"));
  */
 console.log("\nEXERCISE 1 - PART 9");
 
-function adjustLights(array){
-    
+function adjustLights(lights){
+    let element1 = "🔴";
+    let element2 = "🟢";
+    if (lights.every(element => element !== element1 || element !== element2)) {
+        console.log("Array elements must be 🔴 or 🟢");
+        return;
+    }
+    let counter = 0;
+    for (let i = 0; i < lights.length; i++) {
+        if (i > 0){
+            if (lights[i] !== lights[i - 1]){
+                counter++;
+            }
+        }
+    }
+    return counter;
+
 }
+
+let lights1 = ['🔴', '🔴', '🟢', '🔴', '🟢'];
+let lights2 = ['🔴', '🔴', '🟢', '🔴', '🟢',  '🟢',  '🟢', '🔴',  '🔴'];
+
+console.log(adjustLights(lights1));
 
 /**
  * Part 10
