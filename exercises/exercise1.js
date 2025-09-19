@@ -133,8 +133,10 @@ console.log(array5.join("=>"));
 console.log("\nEXERCISE 1 - PART 6");
 
 function findFirstRepeated(array) {
-
+    return array.find((n, i) => array.indexOf(n) !== i) ?? -1;
 }
+
+console.log(findFirstRepeated([1, 4, 7, 3, 8, 4, 5, 5, 1]));
 
 /**
  * Part 7
@@ -172,7 +174,7 @@ console.log(array7.reduce((res, s) => res + s[0], ""));
 
 console.log("\nEXERCISE 1 - PART 8");
 
-function filterWords(array, string){
+function filterWords(array, string) {
     return array.filter(s => [...s].every(char => string.includes(char)));
 }
 
@@ -187,29 +189,23 @@ console.log(filterWords(["house", "car", "watch", "table"], "catboulerham"));
  */
 console.log("\nEXERCISE 1 - PART 9");
 
-function adjustLights(lights){
-    let element1 = "🔴";
-    let element2 = "🟢";
-    if (lights.every(element => element !== element1 || element !== element2)) {
+function adjustLights(lights) {
+    let redLight = "🔴";
+    let greenLight= "🟢";
+    if (!lights.every(element => element === redLight || element === greenLight)) {
         console.log("Array elements must be 🔴 or 🟢");
         return;
     }
     let counter = 0;
-    for (let i = 0; i < lights.length; i++) {
-        if (i > 0){
-            if (lights[i] !== lights[i - 1]){
-                counter++;
-            }
-        }
-    }
+    // redLightChanges = lights.filter((light, i) => )
     return counter;
 
 }
 
-let lights1 = ['🔴', '🔴', '🟢', '🔴', '🟢'];
-let lights2 = ['🔴', '🔴', '🟢', '🔴', '🟢',  '🟢',  '🟢', '🔴',  '🔴'];
+let lights1 = ['🔴', '🔴', '🟢', '🔴', '🟢', '🔴', '🔴', '🟢', '🔴', '🟢'];
+let lights2 = ['🔴', '🔴', '🟢', '🔴', '🟢', '🟢', '🟢', '🔴', '🔴', '🔴'];
 
-console.log(adjustLights(lights1));
+console.log(adjustLights(lights2));
 
 /**
  * Part 10
@@ -219,6 +215,16 @@ console.log(adjustLights(lights1));
  */
 console.log("\nEXERCISE 1 - PART 10");
 
+const students = new Map([
+    ["Cruz", [8,9,7,8]],
+    ["Mari", [7,8,9,6]],
+    ["Gabriel", [5,7,8,9]]
+]);
+
+students.forEach((value, key) => {
+    console.log(`${key} (${value.join(" - ")}). Average: ${value.reduce((acc, num) => acc + num, 0) / value.length}`);
+});
+
 /**
  * Part 11
  * Create a Map collection where the key is the name of a dish and the value is an array of ingredients.
@@ -226,6 +232,22 @@ console.log("\nEXERCISE 1 - PART 10");
  * dishes where that ingredient appears.
  */
 console.log("\nEXERCISE 1 - PART 11");
+
+const dishes = new Map([
+    ["Lentil Stew", ["lentils", "ham", "chorizo", "potato", "onion"]],
+    ["Spaghetti Bolognese", ["spaghetti", "ground beef", "tomato", "onion", "celery"]],
+    ["Margherita Pizza", ["dough", "tomato", "mozzarella", "basil"]],
+    ["Caesar Salad", ["lettuce", "chicken", "parmesan cheese", "croutons", "Caesar dressing"]],
+    ["Spanish Omelette", ["potato", "egg", "onion", "olive oil"]],
+    ["Paella", ["rice", "chicken", "rabbit", "green beans", "butter beans", "tomato", "olive oil", "saffron"]],
+    ["Gazpacho", ["tomato", "cucumber", "bell pepper", "garlic", "bread", "olive oil", "vinegar", "salt"]],
+    ["Croquettes", ["flour", "milk", "butter", "ham", "egg", "breadcrumbs"]],
+    ["Asturian Fabada", ["beans", "chorizo", "blood sausage", "bacon", "onion", "garlic"]],
+    ["Galician-style Octopus", ["octopus", "potato", "paprika", "olive oil", "salt"]]
+]);
+
+const ingredients = new Map();
+
 
 /**
  * Part 12
@@ -256,6 +278,8 @@ console.log("\nEXERCISE 1 - PART 13");
  */
 
 console.log("\nEXERCISE 1 - PART 14");
+
+
 
 /**
  * Part 15
