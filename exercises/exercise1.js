@@ -191,21 +191,26 @@ console.log("\nEXERCISE 1 - PART 9");
 
 function adjustLights(lights) {
     let redLight = "🔴";
-    let greenLight= "🟢";
+    let greenLight = "🟢";
     if (!lights.every(element => element === redLight || element === greenLight)) {
         console.log("Array elements must be 🔴 or 🟢");
         return;
     }
-    let counter = 0;
-    // redLightChanges = lights.filter((light, i) => )
-    return counter;
+    
+    const pattern1 = lights.map((light, i) => (i % 2 === 0 ? redLight : greenLight));
+    const pattern2 = lights.map((light, i) => (i % 2 === 0 ? greenLight : redLight));
 
+    redLightChanges = lights.filter((light, i) => light !== pattern1[i]).length
+    greenLightChanges = lights.filter((light, i) => light !== pattern2[i] ).length
+
+    return Math.min(redLightChanges, greenLightChanges);
 }
 
-let lights1 = ['🔴', '🔴', '🟢', '🔴', '🟢', '🔴', '🔴', '🟢', '🔴', '🟢'];
+
+let lights1 = ['🔴', '🔴', '🟢', '🔴', '🟢'];
 let lights2 = ['🔴', '🔴', '🟢', '🔴', '🟢', '🟢', '🟢', '🔴', '🔴', '🔴'];
 
-console.log(adjustLights(lights2));
+console.log(adjustLights(lights1));
 
 /**
  * Part 10
@@ -216,9 +221,9 @@ console.log(adjustLights(lights2));
 console.log("\nEXERCISE 1 - PART 10");
 
 const students = new Map([
-    ["Cruz", [8,9,7,8]],
-    ["Mari", [7,8,9,6]],
-    ["Gabriel", [5,7,8,9]]
+    ["Cruz", [8, 9, 7, 8]],
+    ["Mari", [7, 8, 9, 6]],
+    ["Gabriel", [5, 7, 8, 9]]
 ]);
 
 students.forEach((value, key) => {
@@ -233,7 +238,7 @@ students.forEach((value, key) => {
  */
 console.log("\nEXERCISE 1 - PART 11");
 
-const dishes = new Map([
+const dishesMap = new Map([
     ["Lentil Stew", ["lentils", "ham", "chorizo", "potato", "onion"]],
     ["Spaghetti Bolognese", ["spaghetti", "ground beef", "tomato", "onion", "celery"]],
     ["Margherita Pizza", ["dough", "tomato", "mozzarella", "basil"]],
@@ -246,7 +251,18 @@ const dishes = new Map([
     ["Galician-style Octopus", ["octopus", "potato", "paprika", "olive oil", "salt"]]
 ]);
 
-const ingredients = new Map();
+const ingredientsMap = new Map();
+dishesMap.forEach((ingredients, dish) => {
+    ingredients.forEach(
+        ingredient => ingredientsMap.has(ingredient) ?
+            ingredientsMap.get(ingredient).push(dish) :
+            ingredientsMap.set(ingredient, [dish])
+    );
+})
+
+ingredientsMap.forEach((dishes, ingredient) => {
+    console.log(ingredient, dishes);
+})
 
 
 /**
@@ -257,6 +273,12 @@ const ingredients = new Map();
  */
 console.log("\nEXERCISE 1 - PART 12");
 
+function evenOdd(...numbers){
+    console.log(`Even numbers: ${numbers.filter(n => n % 2 === 0)}`);
+    console.log(`Odd numbers: ${numbers.filter(n => n % 2 !== 0)}`);
+}
+
+evenOdd(1,2,3,4,5,6,7,8,9,10);
 
 /**
  * Part 13
@@ -267,6 +289,13 @@ console.log("\nEXERCISE 1 - PART 12");
  */
 
 console.log("\nEXERCISE 1 - PART 13");
+
+const addThreeFirst = ([n1 = 0, n2 = 0, n3 = 0]) => {
+    return n1 + n2 + n3;
+}
+console.log(addThreeFirst([1,2])); // 3
+console.log(addThreeFirst([1,2,3])); // 6
+console.log(addThreeFirst([1,2,3,4,5])); // 6
 
 
 /**
@@ -279,7 +308,11 @@ console.log("\nEXERCISE 1 - PART 13");
 
 console.log("\nEXERCISE 1 - PART 14");
 
+const getStringLengths = (...strings) => {
+    return strings.map(s => s.length);
+}
 
+console.log(getStringLengths("potato", "milk", "car", "table"));
 
 /**
  * Part 15
@@ -293,5 +326,13 @@ console.log("\nEXERCISE 1 - PART 14");
 
 console.log("\nEXERCISE 1 - PART 15");
 
-
-
+const array8 = ["Boniato", "Gorila", "Mandrágora", "Explosión", "Gubernamental", "Glorioso"];
+console.log("Original", array8);
+let twoElements = ["Filigrana", "Mauricio", ...array8];
+console.log("Add 2 elements to the beginning of the array", twoElements);
+let delete4and5 = [...array8.slice(0, 4), ...array8.slice(6)];
+console.log("Delete positions 4 and 5",delete4and5);
+const anotherArray = ["Sexy", "Miriápodos", "Solfamidas"];
+let concatenate = array8.concat(anotherArray);
+console.log("Concatenate the elements of another array to the end.", concatenate);
+console.log("Original", array8);
