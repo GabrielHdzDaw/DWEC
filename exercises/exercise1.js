@@ -1,3 +1,5 @@
+// Gabriel Hernández Collado 2ºDAW
+
 /**
  * Part 1
  * Create a function that receives 2 strings. The second string must contain only a letter
