@@ -44,24 +44,3 @@ export class Robot {
         return `Model: ${this.model}, Battery: ${this.#battery}`;
     }
 }
-
-
-//  Create a file flying-robot.class.js with the class FlyingRobot which will
-// inherit from Robot and will have:
-//  • An extra private attribute with the height it reaches (altitude) and its
-// corresponding getter.
-//  • A method fly which will display the message (replace values): Flying
-// model to altitude meters and will decrease the battery by 50%.
-//  • A toString method that will display all the characteristics of the robot
-// (including the robot type)
-//  Finally create the file part2.js where we will implement the functionality of
-// this section. Create an initial array of robots.
-//  We are going to execute this section with node, so we'll take advantage of
-// the built-in ability to read data from the console to interact with the user. To
-// create the object that will read user input, we'll need the following code at the
-// beginning and end of the file:
-//  import * as readline from "node:readline/promises";
-//  import { stdin as input, stdout as output } from "node:process";
-//  const r1 = readline.createInterface({ input, output });
-//  // The entire program
-//  r1.close(); // Finally we close the input/output stream

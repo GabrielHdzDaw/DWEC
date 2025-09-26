@@ -29,9 +29,7 @@ class MobileRobot extends Robot {
     }
 
     toString(){
-        return `Robot type: ${this.constructor.name} ${super.toString()} Speed: ${this.speed}`
+        return `Robot type: ${this.constructor.name}, ${super.toString()} Speed: ${this.speed}`
     }
 
 }
-
-

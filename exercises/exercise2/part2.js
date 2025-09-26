@@ -47,8 +47,50 @@
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 const r1 = readline.createInterface({ input, output });
-
 import { Robot } from "./robot.class.js";
+
 
 const robots = [];
 
+const menu = `
+--------MENU--------
+1) Show Mobile robots
+2) Show flying robots
+3) Create a robot
+4) Move robots
+5) Fly robots
+6) Show robot info
+0) Exit
+`;
+
+let resp = -1;
+do {
+    console.log(menu);
+    resp = await r1.question("Input your selection: ");
+    switch (r1) {
+        case 1:
+           
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+    
+        default:
+            console.log("Not a valid option.");
+            break;
+    }
+} while (resp != 0);
+
+r1.close();

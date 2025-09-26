@@ -30,7 +30,6 @@ class FlyingRobot extends Robot {
     }
 
     toString(){
-        return `Robot type: ${this.constructor.name} ${super.toString()} Height: ${this.height}`;
+        return `Robot type: ${this.constructor.name}, ${super.toString()} Height: ${this.height}`;
     }
 }
-
