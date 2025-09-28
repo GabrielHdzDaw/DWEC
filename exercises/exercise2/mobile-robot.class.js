@@ -8,7 +8,7 @@
 // (including the robot type)
 import { Robot } from "./robot.class.js";
 
-class MobileRobot extends Robot {
+export class MobileRobot extends Robot {
     #speed
 
     constructor(model, speed) {
@@ -26,6 +26,7 @@ class MobileRobot extends Robot {
 
     move() {
         console.log(`Moving ${this.model} at ${this.speed} km/h and will decrease the battery by 20%`);
+        this.battery -= 20;
     }
 
     toString(){

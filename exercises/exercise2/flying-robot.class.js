@@ -9,7 +9,7 @@
 
 import { Robot } from "./robot.class.js";
 
-class FlyingRobot extends Robot {
+export class FlyingRobot extends Robot {
     #height;
 
     constructor(model, height){
@@ -27,6 +27,7 @@ class FlyingRobot extends Robot {
 
     fly(){
         console.log(`Flying ${super.model} to ${this.height} meters and will decrease the battery by 50%`);
+        this.battery -= 50;
     }
 
     toString(){

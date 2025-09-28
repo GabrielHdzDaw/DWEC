@@ -47,13 +47,30 @@
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 const r1 = readline.createInterface({ input, output });
-import { Robot } from "./robot.class.js";
+
+import { FlyingRobot } from "./flying-robot.class.js";
+import { MobileRobot } from "./mobile-robot.class.js";
 
 
-const robots = [];
+const robots = [
+    new FlyingRobot("Helicopter Paracopter", 230),
+    new MobileRobot("Carro", 320),
+    new MobileRobot("Joselito"),
+    new MobileRobot("Neck Breaker"),
+    new FlyingRobot("Doraemon", 500),
+    new MobileRobot("¡Se mueve de verdad!", 123),
+    new FlyingRobot("Avioneta", 125),
+    new MobileRobot("Max 300", 300),
+    new FlyingRobot("Mr Roboto"),
+    new FlyingRobot("Flying José Luis", 1500),
+    new MobileRobot("FiUM", 800),
+    new MobileRobot("Mr Roboto", 12345),
+];
 
 const menu = `
---------MENU--------
+------------------------------------
+MENU
+------------------------------------
 1) Show Mobile robots
 2) Show flying robots
 3) Create a robot
@@ -63,30 +80,55 @@ const menu = `
 0) Exit
 `;
 
-let resp = -1;
+let resp = "";
 do {
     console.log(menu);
     resp = await r1.question("Input your selection: ");
-    switch (r1) {
-        case 1:
-           
+    switch (resp) {
+        case "1":
+            console.log("\nShowing mobile robots: ");
+            robots.filter(robot => robot.constructor.name === "MobileRobot").forEach(robot => {
+                console.log(robot.toString());
+            });
             break;
-        case 2:
-            
+        case "2":
+            console.log("\nShowing flying robots: ");
+            robots.filter(robot => robot.constructor.name === "FlyingRobot").forEach(robot => {
+                console.log(robot.toString());
+            });
             break;
-        case 3:
-            
+        case "3":
+            let robotModel = await r1.question("Enter robot model: ");
+            let robotType = await r1.question("Enter robot type: ");
+            switch (robotType) {
+                case "mobile":
+                    let speed = await r1.question("Enter robot speed: ");
+                    robots.push(new MobileRobot(robotModel, speed));
+                    console.log("Robot added.");
+                    break;
+                case "flying":
+                    let height = await r1.question("Enter robot height: ");
+                    robots.push(new FlyingMobileRobot(robotModel, height));
+                    console.log("Robot added.");
+                    break;
+                default:
+                    console.log("Not a valid robot type.");
+                    break;
+            }
             break;
-        case 4:
-            
+        case "4":
+            robots.forEach(robot => robot.move?.())
             break;
-        case 5:
-            
+        case "5":
+            robots.forEach(robot => robot.fly?.())
             break;
-        case 6:
-            
+        case "6":
+            let position = await r1.question("Enter position: ");
+            console.log(robots[position]?.toString() ?? "\nRobot not found at position", position);
             break;
-    
+        case "0":
+            console.log("Bye bye!");
+            break;
         default:
             console.log("Not a valid option.");
             break;
