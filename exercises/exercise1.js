@@ -22,6 +22,7 @@ function timesChar(string, letter) {
         }
     }
     return counter;
+    // return string.match(new RegExp(char, "ig")) ?? []).length
 }
 
 console.log(timesChar(2, "e"));
@@ -94,11 +95,10 @@ function stringCompression(string) {
         }
     }
     compressedString += count;
-    compressedString += string[string.length - 1];
     return compressedString;
 }
 
-console.log(stringCompression("PAATATTTO"));
+console.log(stringCompression("aaabbc"));
 
 /**
  * Part 5
