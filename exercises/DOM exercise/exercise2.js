@@ -35,7 +35,8 @@ insertBeforeBtn.addEventListener("click", () => {
     const index = [...container.children].indexOf(container.querySelector(".selected"));
     console.log(index);
     if (index > -1) {
-        container.insertBefore(newDiv, container.children[index]);
+        // container.insertBefore(newDiv, container.children[index]);
+        container.children[index].before(newDiv);
     } else {
         container.prepend(newDiv);
     }
@@ -49,7 +50,9 @@ insertAfterBtn.addEventListener("click", () => {
     newDiv.textContent = textInput.value;
     const index = [...container.children].indexOf(container.querySelector(".selected"));
     if (index > -1) {
-        container.insertBefore(newDiv, container.children[index + 1]);
+        // container.insertBefore(newDiv, container.children[index + 1]);
+        container.children[index].after(newDiv);
+
     } else {
         container.append(newDiv);
     }
@@ -63,8 +66,9 @@ replaceBtn.addEventListener("click", () => {
     newDiv.textContent = textInput.value;
     const index = [...container.children].indexOf(container.querySelector(".selected"));
     if (index > -1) {
-        container.removeChild(container.children[index]);
-        container.insertBefore(newDiv, container.children[index]);
+        // container.removeChild(container.children[index]);
+        // container.insertBefore(newDiv, container.children[index]);
+        container.children[index].replaceWith(newDiv);
     }
 });
 
@@ -80,7 +84,8 @@ deleteBtn.addEventListener("click", () => {
 // * The button#clear elemente will remove everything inside the div.container element.
 
 clearBtn.addEventListener("click", () =>{
-    [...container.children].forEach(div =>{
-        div.remove();
-    })
+    // [...container.children].forEach(div =>{
+    //     div.remove();
+    // });
+    container.replaceChildren();
 })
