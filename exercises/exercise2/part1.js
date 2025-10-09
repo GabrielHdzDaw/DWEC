@@ -37,7 +37,14 @@ for (let u of pc1Iterator) {
 console.log("\nSection 2");
 console.log("PC1:", new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(pc1));
 
-const pc9 = users.filter(u => u.authorizations.indexOf("PC9") !== -1).map(u => u.name);
+const pc9 = []
+
+const pc9Iterator = users.values();
+for (let u of pc9Iterator) {
+    if (u.authorizations.indexOf("PC9") !== -1) {
+        pc9.push(u.name);
+    }
+}
 
 console.log("PC9:", new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(pc9));
 
