@@ -34,8 +34,10 @@ for (let u of pc1Iterator) {
         pc1.push(u.name);
     }
 }
+
+const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 console.log("\nSection 2");
-console.log("PC1:", new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(pc1));
+console.log("PC1:", formatter.format(pc1));
 
 const pc9 = []
 
@@ -46,9 +48,9 @@ for (let u of pc9Iterator) {
     }
 }
 
-console.log("PC9:", new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(pc9));
+console.log("PC9:", formatter.format(pc9));
 
-console.log("PC1 and PC9:", new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(new Set(pc1).intersection(new Set(pc9))));
+console.log("PC1 and PC9:", formatter.format(new Set(pc1).intersection(new Set(pc9))));
 
 // Section 3
 //  Generate an array of users with more or less secure passwords. To do so,
@@ -77,7 +79,7 @@ console.log("PC1 and PC9:", new Intl.ListFormat('en', { style: 'long', type: 'co
 
 //Or this (cleaner, readable)
 const securePasswords = users.filter(u =>
-    u.password.length > 5 &&
+    u.password.length >= 5 &&
     /[a-z]/.test(u.password) &&
     /[A-Z]/.test(u.password) &&
     /\d/.test(u.password) &&
