@@ -48,7 +48,7 @@ for (let u of pc9Iterator) {
 
 console.log("PC9:", new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(pc9));
 
-console.log("PC1 and PC9:", new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(new Set(pc1).union(new Set(pc9))));
+console.log("PC1 and PC9:", new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(new Set(pc1).intersection(new Set(pc9))));
 
 // Section 3
 //  Generate an array of users with more or less secure passwords. To do so,
