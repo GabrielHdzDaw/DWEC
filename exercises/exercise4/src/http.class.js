@@ -12,8 +12,8 @@ export class Http {
                 options.body = JSON.stringify(content);
             }
 
-            const res = fetch(url, options);
-
+            const res = await fetch(url, options);
+            
             if (!res.ok) {
                 throw new Error(`Error HTTP: ${res.statusText}`);
             }
@@ -28,19 +28,19 @@ export class Http {
 
 
     async methodGET(url) {
-        return await httpRequest(url, "GET");
+        return await this.httpRequest(url, "GET");
     }
 
     async methodPOST(url, content) {
-        return await httpRequest(url, "POST", content);
+        return await this.httpRequest(url, "POST", content);
     }
 
     async methodPUT(url, content) {
-        return httpRequest(url, "PUT", content);
+        return this.httpRequest(url, "PUT", content);
     }
 
     async methodDELETE(url) {
-        return httpRequest(url, "DELETE");
+        return this.httpRequest(url, "DELETE");
     }
 
 }

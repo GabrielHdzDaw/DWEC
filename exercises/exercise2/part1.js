@@ -78,16 +78,34 @@ console.log("PC1 and PC9:", formatter.format(new Set(pc1).intersection(new Set(p
 // const securePasswords = users.filter(u => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{5,}$/.test(u.password)).map(u => `${u.name} -> ${u.password}`);
 
 //Or this (cleaner, readable)
-const securePasswords = users.filter(u =>
-    u.password.length >= 5 &&
-    /[a-z]/.test(u.password) &&
-    /[A-Z]/.test(u.password) &&
-    /\d/.test(u.password) &&
-    /\W/.test(u.password)
-).map(u => `${u.name} -> ${u.password}`);
+// const securePasswords = users.filter(u =>
+//     u.password.length >= 5 &&
+//     /[a-z]/.test(u.password) &&
+//     /[A-Z]/.test(u.password) &&
+//     /\d/.test(u.password) &&
+//     /\W/.test(u.password)
+// ).map(u => `${u.name} -> ${u.password}`);
+
+// console.log("\nSection 3");
+// securePasswords.forEach(p => {
+//     console.log(p);
+// })
+
+const securePasswordsArray = [];
+const userIterator = users.values();
+
+for (let u of userIterator) {
+    if (u.password.length >= 5 &&
+        /[a-z]/.test(u.password) &&
+        /[A-Z]/.test(u.password) &&
+        /\d/.test(u.password) &&
+        /\W/.test(u.password)) {
+        securePasswordsArray.push(`${u.name} -> ${u.password}`)
+    }
+}
 
 console.log("\nSection 3");
-securePasswords.forEach(p => {
+securePasswordsArray.forEach(p => {
     console.log(p);
 })
 
