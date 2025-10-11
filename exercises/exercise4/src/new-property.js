@@ -1,44 +1,50 @@
-import { ProvincesService } from "./provinces.service";
+import { PropertiesService } from "./properties.service.js";
+import { ProvincesService } from "./provinces.service.js";
 
 const provincesService = new ProvincesService();
-const porpertiesService = new porpertiesService();
+const propertiesService = new PropertiesService();
 
 const form = document.getElementById("property-form");
-
 const provinceInput = document.getElementById("province");
-const provincesList = await provincesService.getProvinces();
-document.addEventListener("DOMContentLoaded", () => {
-    provincesList.provinces.forEach(p => {
-        let option = document.createElement("option");
-        option.value = p.name;
-        option.append(p.name);
-        provinceInput.append(option);
-    })
-
-})
-
-
 const townInput = document.getElementById("town");
-
-
 const addressInput = document.getElementById("address");
 const titleInput = document.getElementById("title");
 const sqmetersInput = document.getElementById("sqmeters");
 const numRoomsInput = document.getElementById("numRooms");
 const numBathsInput = document.getElementById("numBaths");
 const priceInput = document.getElementById("price");
-
 const propertyListings = document.getElementById("property-listings");
-
-
 const mainPhotoInput = document.getElementById("mainPhoto");
 const imagePreview = document.getElementById("image-preview");
-
 const imgTemplate = document.getElementById("property-card-template");
 
-document.addEventListener("DOMContentLoaded", () => {
+const provincesList = await provincesService.getProvinces();
 
+
+provincesList.provinces.forEach(p => {
+    let option = document.createElement("option");
+    option.dataset.id = p.id;
+    option.value = p.name;
+    option.append(p.name);
+    provinceInput.append(option);
+});
+
+provinceInput.addEventListener("change", async (e) => {
+    const selectedOption = e.target.options[e.target.selectedIndex];
+    const townsList = await provincesService.getTowns(selectedOption.dataset.id);
+    
+    townsList.towns.forEach(t => {
+        console.log(t);
+        let option = document.createElement("option");
+        option.dataset.id = t.id;
+        option.value = t.name;
+        option.append(t.name);
+        townInput.append(option);
+    })
 })
+
+
+
 
 mainPhotoInput.addEventListener("change", async (event) => {
     const file = event.target.files[0];
@@ -91,7 +97,6 @@ const createClone = async (formData) => {
     clone.querySelector(".btn-delete").addEventListener("click", (event) => {
         event.target.parentNode.parentNode.remove();
     });
-
     return clone;
 }
 

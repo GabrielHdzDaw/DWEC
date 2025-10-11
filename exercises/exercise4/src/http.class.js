@@ -33,7 +33,6 @@ export class Http {
         }
     }
 
-
     async methodGET(url) {
         return await this.httpRequest(url);
     }
@@ -49,7 +48,6 @@ export class Http {
     async methodDELETE(url) {
         return this.httpRequest(url, "DELETE");
     }
-
 }
 
 
