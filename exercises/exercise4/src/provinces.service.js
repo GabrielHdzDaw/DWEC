@@ -11,7 +11,3 @@ export class ProvincesService {
         return await this.#http.methodGET(`${SERVER_URL}/provinces/${idProvince}/towns`);
     }
 }
-
-const service = new ProvincesService();
-const towns = await service.getTowns(2);
-console.log(towns);

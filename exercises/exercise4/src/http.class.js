@@ -4,7 +4,7 @@ export class Http {
             const options = {
                 method: method,
                 headers: {
-                    "Content-type": "application/json"
+                    "Content-Type": "application/json"
                 }
             }
 
@@ -13,12 +13,19 @@ export class Http {
             }
 
             const res = await fetch(url, options);
-            
+
             if (!res.ok) {
-                throw new Error(`Error HTTP: ${res.statusText}`);
+                const errorText = await res.text();
+                console.error(`Error HTTP: ${res.status} ${res.statusText}`);
+                console.error("Detalles del error:", errorText);
+                throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
             }
 
-            return await res.json();
+            if (method !== "DELETE") {
+                return await res.json();
+            } else if (method === "DELETE" && res.ok){
+                console.log("Objeto eliminado con éxito");
+            }
 
         } catch (err) {
             console.log(`Error en solicitud ${method} a la url: ${url}`);
@@ -28,7 +35,7 @@ export class Http {
 
 
     async methodGET(url) {
-        return await this.httpRequest(url, "GET");
+        return await this.httpRequest(url);
     }
 
     async methodPOST(url, content) {
