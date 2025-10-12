@@ -8,8 +8,6 @@ export class ProvincesService {
     return await this.#http.methodGET(`${SERVER_URL}/provinces`);
   }
   async getTowns(idProvince) {
-    return await this.#http.methodGET(
-      `${SERVER_URL}/provinces/${idProvince}/towns`
-    );
+    return await this.#http.methodGET(`${SERVER_URL}/provinces/${idProvince}/towns`);
   }
 }

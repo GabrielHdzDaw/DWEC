@@ -6,44 +6,36 @@ const properties = await propertiesService.getProperties();
 const propertyListingsContainer = document.getElementById("property-listings");
 const propertyCardTemplate = document.getElementById("property-card-template");
 
-properties.properties.forEach((p) => {
-  const clone = propertyCardTemplate.no
-
-});
-
-
-const createClone = async (formData) => {
+const createClone = (p) => {
   const clone = propertyCardTemplate.content.cloneNode(true);
-  clone.querySelector(".property-image").src = await imgToBase64(
-    formData.get("mainPhoto")
-  );
-  clone.querySelector(".property-title").append(formData.get("title"));
-  clone
-    .querySelector(".property-location")
-    .append(
-      `${formData.get("town")}, ${formData.get("province")} \n ${formData.get(
-        "address"
-      )}`
-    );
-  clone
-    .querySelector(".property-sqmeters")
-    .append(`${formData.get("sqmeters")} square meters`);
-  clone
-    .querySelector(".property-rooms")
-    .append(`${formData.get("numRooms")} rooms`);
-  clone
-    .querySelector(".property-baths")
-    .append(`${formData.get("numBaths")} bathrooms`);
+  clone.querySelectorAll("div")[0].dataset.id = p.id;
+  clone.querySelector(".property-image").src = p.mainPhoto;
+  clone.querySelector(".property-title").append(p.title);
+  clone.querySelector(".property-location").append(`${p.town.name}, ${p.town.province.name}`);
+  clone.querySelector(".property-description").append(p.description);
+  clone.querySelector(".property-sqmeters").append(`${p.sqmeters} m²`);
+  clone.querySelector(".property-rooms").append(`${p.numRooms} rooms`);
+  clone.querySelector(".property-baths").append(`${p.numBaths} bathrooms`);
 
   const currencyFormat = new Intl.NumberFormat("en-GB", {
     style: "currency",
     currency: "EUR",
-  }).format(formData.get("price"));
-
+  }).format(p.price);
   clone.querySelector(".property-price").append(currencyFormat);
 
-  clone.querySelector(".btn-delete").addEventListener("click", (event) => {
+  clone.querySelector(".btn-delete").addEventListener("click", async (event) => {
+    const propertyCard = event.target.closest("[data-id]");
+
+    const deleted = await propertiesService.deleteProperty(propertyCard.dataset.id);
+    if (deleted) {
+      console.log(deleted);
+    }
     event.target.parentNode.parentNode.remove();
   });
   return clone;
 };
+
+properties.properties.forEach((p) => {
+  const clone = createClone(p);
+  propertyListingsContainer.append(clone);
+});
