@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "hola": "echo \"Hola mundo\"",
-    "prestart" :"eslint .",
+    
     "test": "eslint .",
     "start": "vite",
     "build": "vite build",

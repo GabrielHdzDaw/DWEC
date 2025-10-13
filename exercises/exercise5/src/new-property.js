@@ -1,9 +1,11 @@
 import { PropertiesService } from "./properties.service.js";
 import { ProvincesService } from "./provinces.service.js";
-
+import { MapService } from "./map.service.js";
+import { MyGeolocation } from "./my-geolocation.js";
 // #region Services
 const provincesService = new ProvincesService();
 const propertiesService = new PropertiesService();
+
 // #endregion
 
 //#region DOM elements
@@ -19,19 +21,24 @@ const priceInput = document.getElementById("price");
 const descriptionInput = document.getElementById("description");
 const mainPhotoInput = document.getElementById("mainPhoto");
 const imagePreview = document.getElementById("image-preview");
+const mapContainer = document.getElementById("map");
 // #endregion
 
 //#region Populate provinces
 const provincesList = await provincesService.getProvinces();
-provincesList.provinces.forEach((p) => {
+const townsListGlobal = [];
+provincesList.provinces.forEach(async (p) => {
   let option = document.createElement("option");
   option.value = p.id;
   option.append(p.name);
   provinceInput.append(option);
+  const towns = await provincesService.getTowns(p.id);
+  townsListGlobal.push(...towns.towns);
 });
 // #endregion
 
 //#region Populate towns
+
 provinceInput.addEventListener("change", async (e) => {
   const selectedOption = e.target.options[e.target.selectedIndex];
   const townsList = await provincesService.getTowns(selectedOption.value);
@@ -42,6 +49,22 @@ provinceInput.addEventListener("change", async (e) => {
     option.append(t.name);
     townInput.append(option);
   });
+});
+// #endregion
+
+// #region Map
+const myGeolocation = await MyGeolocation.getLocation();
+const mapServiceDefault = new MapService(myGeolocation, mapContainer);
+mapServiceDefault.createMarker(myGeolocation);
+
+townInput.addEventListener("change", (event) => {
+  mapContainer.replaceChildren([]);
+  const townId = parseInt(event.target.value);
+
+  const town = townsListGlobal.find((t) => t.id === parseInt(townId));
+  const coords = { latitude: town.latitude, longitude: town.longitude };
+  const mapService = new MapService(coords, mapContainer);
+  mapService.createMarker(coords);
 });
 // #endregion
 
