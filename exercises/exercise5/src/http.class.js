@@ -21,10 +21,11 @@ export class Http {
         throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
       }
 
-      if (method !== "DELETE") {
+      if (res.status !== 204) {
         return await res.json();
       } else if (method === "DELETE" && res.ok) {
         console.log("Objeto eliminado con éxito");
+        return null;
       }
     } catch (err) {
       console.log(`Error en solicitud ${method} a la url: ${url}`);

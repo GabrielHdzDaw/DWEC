@@ -27,13 +27,13 @@ const mapContainer = document.getElementById("map");
 //#region Populate provinces
 const provincesList = await provincesService.getProvinces();
 const townsListGlobal = [];
-provincesList.provinces.forEach(async (p) => {
+provincesList.forEach(async (p) => {
   let option = document.createElement("option");
   option.value = p.id;
   option.append(p.name);
   provinceInput.append(option);
   const towns = await provincesService.getTowns(p.id);
-  townsListGlobal.push(...towns.towns);
+  townsListGlobal.push(...towns);
 });
 // #endregion
 
@@ -43,7 +43,7 @@ provinceInput.addEventListener("change", async (e) => {
   const selectedOption = e.target.options[e.target.selectedIndex];
   const townsList = await provincesService.getTowns(selectedOption.value);
   townInput.replaceChildren([]);
-  townsList.towns.forEach((t) => {
+  townsList.forEach((t) => {
     let option = document.createElement("option");
     option.value = t.id;
     option.append(t.name);
