@@ -1,15 +1,15 @@
 import { Http } from "./http.class.js";
-import { SERVER_URL } from "./constants.js";
+import { PROVINCES_URL } from "./constants.js";
 
 export class ProvincesService {
   #http = new Http();
 
   async getProvinces() {
-    const res = await this.#http.methodGET(`${SERVER_URL}/provinces`);
+    const res = await this.#http.methodGET(PROVINCES_URL);
     return res.provinces;
   }
   async getTowns(idProvince) {
-    const res = await this.#http.methodGET(`${SERVER_URL}/provinces/${idProvince}/towns`);
+    const res = await this.#http.methodGET(`${ PROVINCES_URL }/${idProvince}/towns`);
     return res.towns;
   }
 }
