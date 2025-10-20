@@ -35,7 +35,7 @@ const createClone = (p) => {
   return clone;
 };
 
-properties.properties.forEach((p) => {
+properties.forEach((p) => {
   const clone = createClone(p);
   propertyListingsContainer.append(clone);
 });

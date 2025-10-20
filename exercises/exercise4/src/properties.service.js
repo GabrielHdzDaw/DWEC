@@ -5,11 +5,13 @@ export class PropertiesService {
   #http = new Http();
 
   async getProperties() {
-    return await this.#http.methodGET(`${SERVER_URL}/properties`);
+    const res = await this.#http.methodGET(`${SERVER_URL}/properties`);
+    return res.properties;
   }
 
   async insertProperty(propertyObject) {
-    return await this.#http.methodPOST(`${SERVER_URL}/properties`, propertyObject);
+    const res = await this.#http.methodPOST(`${SERVER_URL}/properties`, propertyObject);
+    return res;
   }
 
   async deleteProperty(propertyId) {

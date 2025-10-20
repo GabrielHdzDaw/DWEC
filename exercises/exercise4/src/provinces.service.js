@@ -5,9 +5,11 @@ export class ProvincesService {
   #http = new Http();
 
   async getProvinces() {
-    return await this.#http.methodGET(`${SERVER_URL}/provinces`);
+    const res = await this.#http.methodGET(`${SERVER_URL}/provinces`);
+    return res.provinces;
   }
   async getTowns(idProvince) {
-    return await this.#http.methodGET(`${SERVER_URL}/provinces/${idProvince}/towns`);
+    const res = await this.#http.methodGET(`${SERVER_URL}/provinces/${idProvince}/towns`);
+    return res.towns;
   }
 }
