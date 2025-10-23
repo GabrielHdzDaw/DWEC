@@ -16,11 +16,9 @@ const sqmetersInput = document.getElementById("sqmeters");
 const numRoomsInput = document.getElementById("numRooms");
 const numBathsInput = document.getElementById("numBaths");
 const priceInput = document.getElementById("price");
-const propertyListings = document.getElementById("property-listings");
 const descriptionInput = document.getElementById("description");
 const mainPhotoInput = document.getElementById("mainPhoto");
 const imagePreview = document.getElementById("image-preview");
-const imgTemplate = document.getElementById("property-card-template");
 // #endregion
 
 //#region Populate provinces
