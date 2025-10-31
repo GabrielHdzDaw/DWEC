@@ -1,4 +1,4 @@
-import type { Coordinates } from "../interfaces/coordinates";
+import type { Coordinates } from "./interfaces/coordinates";
 
 export class MyGeolocation {
   static getLocation(): Promise<Coordinates> {
