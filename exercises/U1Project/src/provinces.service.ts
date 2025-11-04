@@ -1,7 +1,7 @@
-import { Http } from "./http.class.js";
-import { PROVINCES_URL } from "./constants.js";
+import { Http } from "./http.class.ts";
+import { PROVINCES_URL } from "./constants.ts";
 
-interface Province {
+export interface Province {
   id: number;
   name: string;
 }
@@ -10,7 +10,7 @@ interface ProvincesResponse {
   provinces: Province[];
 }
 
-interface Town {
+export interface Town {
   id: number;
   name: string;
 }

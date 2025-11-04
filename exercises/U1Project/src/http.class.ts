@@ -5,8 +5,8 @@ export class Http {
     headers?: HeadersInit,
     body?: string
   ): Promise<T> {
-    const token = localStorage.getItem("token");
-    if (token) headers = { ...headers, Authorization: "Bearer " + token };
+    // const token = localStorage.getItem("token");
+    // if (token) headers = { ...headers, Authorization: "Bearer " + token };
 
     const resp = await fetch(url, { method, headers, body });
     if (!resp.ok) throw await resp.json();

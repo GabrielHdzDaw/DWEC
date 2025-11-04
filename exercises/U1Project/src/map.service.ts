@@ -13,7 +13,7 @@ export class MapService {
 
   constructor(
     { latitude, longitude }: Coordinates,
-    divMapId: string,
+    divMapId: HTMLDivElement,
     zoom = 14
   ) {
     useGeographic();

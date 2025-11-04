@@ -40,11 +40,7 @@ export class MapService {
     return this.#view;
   }
 
-  createMarker(
-    { latitude, longitude },
-    color = "#3399CC",
-    fill = "#fff"
-  ) {
+  createMarker({ latitude, longitude }, color = "#3399CC", fill = "#fff") {
     const positionFeature = new Feature({
       geometry: new Point([longitude, latitude]),
     });
@@ -67,4 +63,6 @@ export class MapService {
 
     return positionFeature;
   }
+
+  
 }

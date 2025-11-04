@@ -1,7 +1,9 @@
-import { PropertiesService } from "./properties.service.js";
-import { ProvincesService } from "./provinces.service.js";
-import { MapService } from "./map.service.js";
-import { MyGeolocation } from "./my-geolocation.js";
+import { PropertiesService } from "./properties.service.ts";
+// import type { Property } from "./properties.service.ts";
+import { ProvincesService } from "./provinces.service.ts";
+import type { Province, Town } from "./provinces.service.ts";
+import { MapService } from "./map.service.ts";
+import { MyGeolocation } from "./my-geolocation.ts";
 // #region Services
 const provincesService = new ProvincesService();
 const propertiesService = new PropertiesService();
@@ -9,43 +11,43 @@ const propertiesService = new PropertiesService();
 // #endregion
 
 //#region DOM elements
-const form = document.getElementById("property-form");
-const provinceInput = document.getElementById("province");
-const townInput = document.getElementById("town");
-const addressInput = document.getElementById("address");
-const titleInput = document.getElementById("title");
-const sqmetersInput = document.getElementById("sqmeters");
-const numRoomsInput = document.getElementById("numRooms");
-const numBathsInput = document.getElementById("numBaths");
-const priceInput = document.getElementById("price");
-const descriptionInput = document.getElementById("description");
-const mainPhotoInput = document.getElementById("mainPhoto");
-const imagePreview = document.getElementById("image-preview");
-const mapContainer = document.getElementById("map");
+const form = document.getElementById("property-form")! as HTMLFormElement;
+const provinceInput = document.getElementById("province")! as HTMLSelectElement;
+const townInput = document.getElementById("town")! as HTMLSelectElement;
+const addressInput = document.getElementById("address")! as HTMLInputElement;
+const titleInput = document.getElementById("title")! as HTMLInputElement;
+const sqmetersInput = document.getElementById("sqmeters")! as HTMLInputElement;
+const numRoomsInput = document.getElementById("numRooms")! as HTMLInputElement;
+const numBathsInput = document.getElementById("numBaths")! as HTMLInputElement;
+const priceInput = document.getElementById("price")! as HTMLInputElement;
+const descriptionInput = document.getElementById("description")! as HTMLInputElement;
+const mainPhotoInput = document.getElementById("mainPhoto")! as HTMLImageElement;
+const imagePreview = document.getElementById("image-preview")! as HTMLImageElement;
+const mapContainer = document.getElementById("map")! as HTMLDivElement;
 // #endregion
 
 //#region Populate provinces
-const provincesList = await provincesService.getProvinces();
-const townsListGlobal = [];
-provincesList.forEach(async (p) => {
-  let option = document.createElement("option");
-  option.value = p.id;
+const provincesList: Province[] = await provincesService.getProvinces();
+const townsListGlobal: Town[] = [];
+provincesList.forEach(async p => {
+  const option: HTMLOptionElement = document.createElement("option");
+  option.value = p.id.toString();
   option.append(p.name);
-  provinceInput.append(option);
-  const towns = await provincesService.getTowns(p.id);
+  provinceInput?.append(option);
+  const towns: Town[] = await provincesService.getTowns(p.id);
   townsListGlobal.push(...towns);
 });
 // #endregion
 
 //#region Populate towns
 
-provinceInput.addEventListener("change", async (e) => {
-  const selectedOption = e.target.options[e.target.selectedIndex];
-  const townsList = await provincesService.getTowns(selectedOption.value);
-  townInput.replaceChildren([]);
-  townsList.forEach((t) => {
-    let option = document.createElement("option");
-    option.value = t.id;
+provinceInput.addEventListener("change", async e => {
+  const selectedOption = (e.target as HTMLSelectElement).options[(e.target as HTMLSelectElement).selectedIndex];
+  const townsList = await provincesService.getTowns(parseInt(selectedOption.value));
+  townInput.replaceChildren();
+  townsList.forEach(t => {
+    const option: HTMLOptionElement = document.createElement("option");
+    option.value = t.id.toString();
     option.append(t.name);
     townInput.append(option);
   });
@@ -57,11 +59,11 @@ const myGeolocation = await MyGeolocation.getLocation();
 const mapServiceDefault = new MapService(myGeolocation, mapContainer);
 mapServiceDefault.createMarker(myGeolocation);
 
-townInput.addEventListener("change", (event) => {
-  mapContainer.replaceChildren([]);
+townInput.addEventListener("change", event => {
+  mapContainer.replaceChildren();
   const townId = parseInt(event.target.value);
 
-  const town = townsListGlobal.find((t) => t.id === parseInt(townId));
+  const town = townsListGlobal.find(t => t.id === parseInt(townId));
   const coords = { latitude: town.latitude, longitude: town.longitude };
   const mapService = new MapService(coords, mapContainer);
   mapService.createMarker(coords);
@@ -69,7 +71,7 @@ townInput.addEventListener("change", (event) => {
 // #endregion
 
 //#region Image preview
-mainPhotoInput.addEventListener("change", async (event) => {
+mainPhotoInput.addEventListener("change", async event => {
   const file = event.target.files[0];
   if (!file) {
     imagePreview.src = "";
@@ -90,7 +92,7 @@ mainPhotoInput.addEventListener("change", async (event) => {
 });
 
 //#region Form validation
-const validateForm = (formData) => {
+const validateForm = formData => {
   let valid = true;
 
   const mainPhoto = formData.get("mainPhoto");
@@ -195,7 +197,7 @@ const validateForm = (formData) => {
 };
 
 //#region Form submit
-form.addEventListener("submit", async (event) => {
+form.addEventListener("submit", async event => {
   event.preventDefault();
 
   const formData = new FormData(form);
@@ -218,7 +220,7 @@ form.addEventListener("submit", async (event) => {
 });
 
 //#region Utilities
-const imgToBase64 = async (file) => {
+const imgToBase64 = async file => {
   const reader = new FileReader();
   return new Promise((resolve, reject) => {
     reader.onload = () => {
@@ -229,7 +231,7 @@ const imgToBase64 = async (file) => {
   });
 };
 
-const formDataToJSON = (formData) => {
+const formDataToJSON = formData => {
   const object = {};
   formData.forEach((value, key) => {
     //We need to transform these to numbers
