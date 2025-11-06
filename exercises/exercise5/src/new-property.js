@@ -43,6 +43,9 @@ provinceInput.addEventListener("change", async (e) => {
   const selectedOption = e.target.options[e.target.selectedIndex];
   const townsList = await provincesService.getTowns(selectedOption.value);
   townInput.replaceChildren([]);
+  const defaultOption = document.createElement("option");
+  defaultOption.textContent = "Select a town";
+  townInput.append(defaultOption);
   townsList.forEach((t) => {
     let option = document.createElement("option");
     option.value = t.id;
@@ -54,17 +57,16 @@ provinceInput.addEventListener("change", async (e) => {
 
 // #region Map
 const myGeolocation = await MyGeolocation.getLocation();
-const mapServiceDefault = new MapService(myGeolocation, mapContainer);
+let mapServiceDefault = new MapService(myGeolocation, mapContainer);
 mapServiceDefault.createMarker(myGeolocation);
 
 townInput.addEventListener("change", (event) => {
-  mapContainer.replaceChildren([]);
   const townId = parseInt(event.target.value);
-
+  console.log(townId);
   const town = townsListGlobal.find((t) => t.id === parseInt(townId));
   const coords = { latitude: town.latitude, longitude: town.longitude };
-  const mapService = new MapService(coords, mapContainer);
-  mapService.createMarker(coords);
+  mapServiceDefault.view.setCenter([town.longitude, town.latitude]);
+  mapServiceDefault.createMarker(coords);
 });
 // #endregion
 
