@@ -58,15 +58,15 @@ provinceInput.addEventListener("change", async (e) => {
 // #region Map
 const myGeolocation = await MyGeolocation.getLocation();
 let mapServiceDefault = new MapService(myGeolocation, mapContainer);
-mapServiceDefault.createMarker(myGeolocation);
+const marker = mapServiceDefault.createMarker(myGeolocation);
 
 townInput.addEventListener("change", (event) => {
   const townId = parseInt(event.target.value);
   console.log(townId);
   const town = townsListGlobal.find((t) => t.id === parseInt(townId));
-  const coords = { latitude: town.latitude, longitude: town.longitude };
-  mapServiceDefault.view.setCenter([town.longitude, town.latitude]);
-  mapServiceDefault.createMarker(coords);
+  const coords = [town.longitude, town.latitude];
+  mapServiceDefault.view.setCenter(coords);
+  marker.getGeometry().setCoordinates(coords);
 });
 // #endregion
 
