@@ -1,0 +1,35 @@
+<div class="card">
+  <div class="card-header bg-primary text-white">Mi lista de productos</div>
+  <div class="card-block">
+    @if(products.length) {
+    <div class="table-responsive">
+      <table class="table table-striped m-0">
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Disponible</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (product of products; track product.id){
+          <tr (click)="printDesc(product)">
+            <td><img [src]="product.imageUrl" [alt]="product.description" /></td>
+            <td [ngClass]="{ 'text-danger': $even, 'text-success': $odd }">
+              {{ product.description }}
+            </td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.available }}</td>
+          </tr>
+          } @empty {
+          <p>No hay elementos para mostrar</p>
+          }
+        </tbody>
+      </table>
+    </div>
+    } @else {
+    <h3>No hay productos disponibles</h3>
+    }
+  </div>
+</div>
