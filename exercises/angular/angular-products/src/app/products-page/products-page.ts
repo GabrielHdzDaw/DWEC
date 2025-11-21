@@ -1,19 +1,64 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import type { Product } from '../interfaces/product';
-import { NgClass } from '@angular/common';
+import { JsonPipe, NgClass } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'products-page',
-  imports: [NgClass],
+  imports: [NgClass, FormsModule, JsonPipe],
   templateUrl: './products-page.html',
   styleUrl: './products-page.css',
 })
 export class ProductsPage {
   title = 'Mi lista de productos';
-  
-  printDesc(product: Product){
+  showImage = true;
+  printDesc(product: Product) {
     console.log(product.description);
   }
+
+  newProduct!: Product;
+  fileName = '';
+
+  #changeDetector = inject(ChangeDetectorRef); // Necessary in new Angular zoneless apps
+
+  constructor() {
+    this.resetProduct();
+  }
+
+  changeImage(event: Event) {
+    const fileInput = event.target as HTMLInputElement;
+    if (!fileInput.files?.length) return;
+    const reader = new FileReader();
+    reader.readAsDataURL(fileInput.files[0]);
+    reader.addEventListener('loadend', () => {
+      this.newProduct.imageUrl = reader.result as string;
+      this.#changeDetector.markForCheck(); // Necessary in new Angular zoneless apps
+    });
+  }
+
+  addProduct() {
+    this.newProduct.id = Math.max(...this.products.map((p) => p.id!)) + 1;
+    this.products.push(this.newProduct);
+    this.fileName = '';
+    this.resetProduct();
+  }
+
+  private resetProduct() {
+    this.newProduct = {
+      id: 0,
+      description: '',
+      available: '',
+      imageUrl: '',
+      rating: 1,
+      price: 0,
+    };
+    this.fileName = '';
+  }
+
+  toggleImage() {
+    this.showImage = !this.showImage;
+  }
+
   // products: Product[] = [];
   products: Product[] = [
     {
