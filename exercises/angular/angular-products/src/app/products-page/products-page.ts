@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import type { Product } from '../interfaces/product';
-import { JsonPipe, NgClass } from '@angular/common';
+import { JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'products-page',
-  imports: [NgClass, FormsModule, JsonPipe],
+  imports: [FormsModule, JsonPipe],
   templateUrl: './products-page.html',
   styleUrl: './products-page.css',
 })
