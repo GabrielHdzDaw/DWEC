@@ -1,7 +1,7 @@
 <div class="card mb-4">
   <div class="card-header bg-success text-white">Add product</div>
   <div class="card-body">
-    <form (ngSubmit)="addProduct()">
+    <form (ngSubmit)="addProduct(form)" #form="ngForm">
       <label class="mb-3 row">
         <span class="col-sm-2 col-form-label text-sm-end">Description</span>
         <div class="col-sm-10">
@@ -65,21 +65,35 @@
 <div class="card">
   <div class="card-header bg-primary text-white">Mi lista de productos</div>
   <div class="card-block">
+    <div class="row py-3">
+      <label class="col-form-label col-sm-2 text-sm-end" for="filterDesc"> Filter: </label>
+      <div class="col-sm-5">
+        <input
+          type="text"
+          [(ngModel)]="search"
+          class="form-control"
+          id="filterDesc"
+          placeholder="Filter..."
+        />
+      </div>
+      <div class="col-form-label col-sm-5">Filtered by: {{ search() }}</div>
+    </div>
     @if(products.length) {
     <div class="table-responsive">
       <table class="table table-striped m-0">
         <thead>
           <tr>
             <th>
+              @let buttonText = (showImage() ? 'Hide' : 'Show') + ' images';
               <button
                 class="btn btn-sm"
                 [class]="{
-                'btn-danger': this.showImage,
-                'btn-primary': !this.showImage,
+                'btn-danger': showImage(),
+                'btn-primary': !showImage(),
             }"
                 (click)="toggleImage()"
               >
-                {{ showImage ? 'Hide' : 'Show' }} images
+                {{ buttonText }}
               </button>
             </th>
             <th>Imagen</th>
@@ -89,16 +103,22 @@
           </tr>
         </thead>
         <tbody>
-          @for (product of products; track product.id){
+          @for (product of products | productFilter:search(); track product.id){
           <tr (click)="printDesc(product)">
-            @if(showImage){
-            <td><img [src]="product.imageUrl" [alt]="product.description" /></td>
+            @if(showImage()){
+            <td>
+              <img
+                [src]="product.imageUrl"
+                [alt]="product.description"
+                [title]="product.description | uppercase"
+              />
+            </td>
             }
             <td [class]="{ 'text-danger': $even, 'text-success': $odd }">
               {{ product.description }}
             </td>
-            <td>{{ product.price }}</td>
-            <td>{{ product.available }}</td>
+            <td>{{ product.price | intlCurrency : 'EUR' : 'es-ES' }}</td>
+            <td>{{ product.available | date }}</td>
           </tr>
           } @empty {
           <p>No hay elementos para mostrar</p>
@@ -110,5 +130,5 @@
     <h3>No hay productos disponibles</h3>
     }
   </div>
-  {{newProduct | json}}
+  {{ newProduct | json }}
 </div>

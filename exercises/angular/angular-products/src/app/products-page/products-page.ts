@@ -1,28 +1,49 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { DatePipe, JsonPipe, UpperCasePipe } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import type { Product } from '../interfaces/product';
-import { JsonPipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { IntlCurrencyPipe } from '../pipes/intl-currency-pipe';
+import { ProductFilterPipe } from '../pipes/product-filter-pipe';
 
 @Component({
   selector: 'products-page',
-  imports: [FormsModule, JsonPipe],
+  imports: [FormsModule, JsonPipe, DatePipe, UpperCasePipe, IntlCurrencyPipe, ProductFilterPipe],
+  standalone: true,
+  providers: [],
   templateUrl: './products-page.html',
   styleUrl: './products-page.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsPage {
   title = 'Mi lista de productos';
-  showImage = true;
+  showImage = signal(true);
   printDesc(product: Product) {
     console.log(product.description);
   }
 
   newProduct!: Product;
+
   fileName = '';
+
+  search = signal('');
 
   #changeDetector = inject(ChangeDetectorRef); // Necessary in new Angular zoneless apps
 
   constructor() {
-    this.resetProduct();
+    this.newProduct = {
+      id: 0,
+      description: '',
+      available: '',
+      imageUrl: '',
+      rating: 1,
+      price: 0,
+    };
   }
 
   changeImage(event: Event) {
@@ -36,27 +57,28 @@ export class ProductsPage {
     });
   }
 
-  addProduct() {
+  addProduct(form: NgForm) {
     this.newProduct.id = Math.max(...this.products.map((p) => p.id!)) + 1;
-    this.products.push(this.newProduct);
+    this.products = [...this.products, {...this.newProduct}];
     this.fileName = '';
-    this.resetProduct();
+    this.newProduct.imageUrl = '';
+    form.resetForm();
   }
 
-  private resetProduct() {
-    this.newProduct = {
-      id: 0,
-      description: '',
-      available: '',
-      imageUrl: '',
-      rating: 1,
-      price: 0,
-    };
-    this.fileName = '';
-  }
+  // private resetProduct() {
+  //   this.newProduct = {
+  //     id: 0,
+  //     description: '',
+  //     available: '',
+  //     imageUrl: '',
+  //     rating: 1,
+  //     price: 0,
+  //   };
+  //   this.fileName = '';
+  // }
 
   toggleImage() {
-    this.showImage = !this.showImage;
+    this.showImage.update((show) => !show);
   }
 
   // products: Product[] = [];
