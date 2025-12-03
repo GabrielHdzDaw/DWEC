@@ -1,19 +1,18 @@
-import { DatePipe, JsonPipe, UpperCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  inject,
-  signal,
+  computed,
+  signal
 } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import type { Product } from '../interfaces/product';
-import { IntlCurrencyPipe } from '../pipes/intl-currency-pipe';
-import { ProductFilterPipe } from '../pipes/product-filter-pipe';
+import { ProductForm } from '../product-form/product-form';
+import { ProductItem } from '../product-item/product-item';
+
 
 @Component({
   selector: 'products-page',
-  imports: [FormsModule, JsonPipe, DatePipe, UpperCasePipe, IntlCurrencyPipe, ProductFilterPipe],
+  imports: [FormsModule, ProductItem, ProductForm],
   standalone: true,
   providers: [],
   templateUrl: './products-page.html',
@@ -26,14 +25,24 @@ export class ProductsPage {
   printDesc(product: Product) {
     console.log(product.description);
   }
-
-  newProduct!: Product;
-
+  newProduct = {
+    id: 0,
+    description: '',
+    available: '',
+    imageUrl: '',
+    rating: 1,
+    price: 0,
+  };
   fileName = '';
 
   search = signal('');
+  filteredProducts = computed(() =>
+    this.products().filter((p) =>
+      p.description.toLocaleLowerCase().includes(this.search().toLocaleLowerCase())
+    )
+  );
 
-  #changeDetector = inject(ChangeDetectorRef); // Necessary in new Angular zoneless apps
+  // #changeDetector = inject(ChangeDetectorRef); // Necessary in new Angular zoneless apps
 
   constructor() {
     this.newProduct = {
@@ -46,34 +55,17 @@ export class ProductsPage {
     };
   }
 
-  changeImage(event: Event) {
-    const fileInput = event.target as HTMLInputElement;
-    if (!fileInput.files?.length) return;
-    const reader = new FileReader();
-    reader.readAsDataURL(fileInput.files[0]);
-    reader.addEventListener('loadend', () => {
-      this.newProduct.imageUrl = reader.result as string;
-      this.#changeDetector.markForCheck(); // Necessary in new Angular zoneless apps
-    });
+  addProduct(product: Product) {
+    product.id = Math.max(...this.products().map((p) => p.id!)) + 1;
+    this.products.update((products) => [...products, product]);
   }
 
-  addProduct(form: NgForm) {
-    this.newProduct.id = Math.max(...this.products.map((p) => p.id!)) + 1;
-    this.products = [...this.products, {...this.newProduct}];
-    this.fileName = '';
-    this.newProduct.imageUrl = '';
-    form.resetForm();
+  deleteProduct(product: Product) {
+    this.products.update((products) => products.filter((p) => p !== product));
   }
 
   // private resetProduct() {
-  //   this.newProduct = {
-  //     id: 0,
-  //     description: '',
-  //     available: '',
-  //     imageUrl: '',
-  //     rating: 1,
-  //     price: 0,
-  //   };
+  //   this.
   //   this.fileName = '';
   // }
 
@@ -82,7 +74,7 @@ export class ProductsPage {
   }
 
   // products: Product[] = [];
-  products: Product[] = [
+  products = signal<Product[]>([
     {
       id: 1,
       description: 'SSD hard drive',
@@ -115,5 +107,5 @@ export class ProductsPage {
       imageUrl: 'hdd.jpg',
       rating: 2,
     },
-  ];
+  ]);
 }

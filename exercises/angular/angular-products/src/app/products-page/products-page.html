@@ -1,64 +1,4 @@
-<div class="card mb-4">
-  <div class="card-header bg-success text-white">Add product</div>
-  <div class="card-body">
-    <form (ngSubmit)="addProduct(form)" #form="ngForm">
-      <label class="mb-3 row">
-        <span class="col-sm-2 col-form-label text-sm-end">Description</span>
-        <div class="col-sm-10">
-          <input
-            type="text"
-            class="form-control"
-            name="description"
-            [(ngModel)]="newProduct.description"
-          />
-        </div>
-      </label>
-      <label class="mb-3 row">
-        <span class="col-sm-2 col-form-label text-sm-end">Price</span>
-        <div class="col-sm-10">
-          <input type="number" class="form-control" name="price" [(ngModel)]="newProduct.price" />
-        </div>
-      </label>
-      <label class="mb-3 row">
-        <span class="col-sm-2 col-form-label text-sm-end">Available</span>
-        <div class="col-sm-10">
-          <input
-            type="date"
-            class="form-control"
-            name="available"
-            [(ngModel)]="newProduct.available"
-          />
-        </div>
-      </label>
-      <label class="mb-3 row">
-        <span class="col-sm-2 col-form-label text-sm-end"> Image</span>
-        <div class="col-sm-10">
-          <input
-            type="file"
-            class="form-control"
-            accept="image/*"
-            (change)="changeImage($event)"
-            name="fileName"
-            [(ngModel)]="fileName"
-          />
-        </div>
-      </label>
-      @if (newProduct.imageUrl) {
-      <div class="row mb-3">
-        <div class="col-sm-10 offset-sm-2">
-          <img class="product-img" [src]="newProduct.imageUrl" alt="" />
-        </div>
-      </div>
-      }
-
-      <div class="mb-3 row">
-        <div class="offset-sm-2 col-sm-10">
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
+<product-form (added)="addProduct($event)"></product-form>
 
 <!-- Card con la lista de productos aquí -->
 
@@ -78,57 +18,37 @@
       </div>
       <div class="col-form-label col-sm-5">Filtered by: {{ search() }}</div>
     </div>
-    @if(products.length) {
-    <div class="table-responsive">
-      <table class="table table-striped m-0">
-        <thead>
-          <tr>
-            <th>
-              @let buttonText = (showImage() ? 'Hide' : 'Show') + ' images';
-              <button
-                class="btn btn-sm"
-                [class]="{
-                'btn-danger': showImage(),
-                'btn-primary': !showImage(),
-            }"
-                (click)="toggleImage()"
-              >
-                {{ buttonText }}
-              </button>
-            </th>
-            <th>Imagen</th>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Disponible</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (product of products | productFilter:search(); track product.id){
-          <tr (click)="printDesc(product)">
-            @if(showImage()){
-            <td>
-              <img
-                [src]="product.imageUrl"
-                [alt]="product.description"
-                [title]="product.description | uppercase"
-              />
-            </td>
-            }
-            <td [class]="{ 'text-danger': $even, 'text-success': $odd }">
-              {{ product.description }}
-            </td>
-            <td>{{ product.price | intlCurrency : 'EUR' : 'es-ES' }}</td>
-            <td>{{ product.available | date }}</td>
-          </tr>
-          } @empty {
-          <p>No hay elementos para mostrar</p>
-          }
-        </tbody>
-      </table>
+    @if (filteredProducts().length) {
+    <div class="row headers g-0">
+      <div class="col-2">
+        @let buttonText = (showImage()?'Hide':'Show') + ' images';
+        <button
+          class="btn btn-sm"
+          [class]="{
+                'btn-danger': this.showImage(),
+                'btn-primary': !this.showImage(),
+              }"
+          (click)="toggleImage()"
+        >
+          {{ buttonText }}
+        </button>
+      </div>
+      <div class="col-4 my-auto">Producto</div>
+      <div class="col my-auto">Precio</div>
+      <div class="col my-auto">Disponible</div>
+      <div class="col-auto" style="width: 2em"></div>
     </div>
-    } @else {
+    @for (product of filteredProducts(); track product.id) {
+    <products-item
+      [product]="product"
+      [showImage]="showImage()"
+      (deleted)="deleteProduct(product)"
+      class="row g-0"
+    />
+    } @empty {
+    <p>No hay elementos para mostrar</p>
+    } } @else {
     <h3>No hay productos disponibles</h3>
     }
   </div>
-  {{ newProduct | json }}
 </div>
