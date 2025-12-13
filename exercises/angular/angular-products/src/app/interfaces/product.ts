@@ -6,3 +6,11 @@ export interface Product {
   imageUrl: string;
   rating: number;
 }
+
+export interface ProductsResponse {
+  products: Product[];
+}
+
+export interface SingleProductResponse {
+  product: Product;
+}

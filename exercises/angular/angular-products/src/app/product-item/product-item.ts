@@ -1,23 +1,61 @@
 import { DatePipe, UpperCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { Product } from '../interfaces/product';
 import { IntlCurrencyPipe } from '../pipes/intl-currency-pipe';
+import { StarRating } from '../star-rating/star-rating';
+// import { SetColorDirective } from "../directives/set-color-directive";
+import { FormsModule } from '@angular/forms';
+import { ProductsService } from '../services/products-service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'products-item',
   standalone: true,
-  imports: [DatePipe, UpperCasePipe, IntlCurrencyPipe],
+  imports: [DatePipe, UpperCasePipe, IntlCurrencyPipe, StarRating, FormsModule],
   templateUrl: './product-item.html',
   styleUrl: './product-item.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductItem {
+  color = signal('#fff');
   product = input.required<Product>(); // required (obligatorio)
   showImage = input(true); // Con valor inicial por defecto (opcional)
 
   deleted = output<void>();
 
+  #changeDetector = inject(ChangeDetectorRef);
+  #destroyRef = inject(DestroyRef);
+
   deleteProduct() {
-    this.deleted.emit(); // Lanzamos el evento
+    this.#productsService
+      .deleteProduct(this.product().id!)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe(() => this.deleted.emit());
+  }
+
+  #productsService = inject(ProductsService);
+
+  changeRating(rating: number) {
+    const oldRating = this.product().rating; // Guardamos puntuación actual
+    this.product().rating = rating; // Modificamos antes de la llamada
+    this.#productsService
+      .changeRating(this.product().id!, rating)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe({
+        error: () => {
+          // Ha habido un error (puntuación no cambiada en el servidor)
+          this.product().rating = oldRating; // Restauramos puntuación
+          this.#changeDetector.markForCheck(); // Detectar cambio
+        },
+      });
   }
 }
