@@ -1,4 +1,3 @@
-/* :host hace referencia al propio elemento */
 :host(:nth-child(odd)) {
   background-color: #eee;
 }

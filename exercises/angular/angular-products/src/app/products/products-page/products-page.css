@@ -1,0 +1,18 @@
+td {
+  vertical-align: middle;
+
+  img {
+    height: 40px;
+  }
+}
+
+.red {
+  color: red;
+}
+
+.headers {
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  padding: 5px;
+}

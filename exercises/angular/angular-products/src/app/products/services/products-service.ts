@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, Signal } from '@angular/core';
 import { Product, SingleProductResponse } from '../interfaces/product';
 import { ProductsResponse } from '../interfaces/products-response';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 
 @Injectable({
@@ -11,8 +11,15 @@ export class ProductsService {
   #http = inject(HttpClient);
   #productsUrl = 'https://api.fullstackpro.es/products-example/products';
 
-  getProducts(): Observable<Product[]> {
-    return this.#http.get<ProductsResponse>(this.#productsUrl).pipe(map((res) => res.products));
+  getProductsResource(search: Signal<string>) {
+    return httpResource<ProductsResponse>(() => {
+      const urlSearchParams = new URLSearchParams({ search: search() });
+      return `${this.#productsUrl}?${urlSearchParams.toString()}`;
+    });
+  }
+
+  getProductIdResource(id: Signal<number>) {
+    return httpResource<SingleProductResponse>(() => `${this.#productsUrl}/${id()}`);
   }
 
   changeRating(idProduct: number, rating: number): Observable<void> {

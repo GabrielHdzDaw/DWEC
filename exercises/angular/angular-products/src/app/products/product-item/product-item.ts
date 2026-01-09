@@ -1,48 +1,26 @@
-import { DatePipe, UpperCasePipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  DestroyRef,
-  inject,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject, input, output } from '@angular/core';
 import { Product } from '../interfaces/product';
-import { IntlCurrencyPipe } from '../pipes/intl-currency-pipe';
+import { DatePipe, UpperCasePipe } from '@angular/common';
+import { IntlCurrencyPipe } from '../../shared/pipes/intl-currency-pipe';
 import { StarRating } from '../star-rating/star-rating';
-// import { SetColorDirective } from "../directives/set-color-directive";
-import { FormsModule } from '@angular/forms';
 import { ProductsService } from '../services/products-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'products-item',
-  standalone: true,
-  imports: [DatePipe, UpperCasePipe, IntlCurrencyPipe, StarRating, FormsModule],
+  selector: 'product-item',
+  imports: [DatePipe, UpperCasePipe, IntlCurrencyPipe, StarRating, RouterLink],
   templateUrl: './product-item.html',
   styleUrl: './product-item.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductItem {
-  color = signal('#fff');
-  product = input.required<Product>(); // required (obligatorio)
-  showImage = input(true); // Con valor inicial por defecto (opcional)
-
+  product = input.required<Product>();
+  showImage = input(true);
   deleted = output<void>();
 
-  #changeDetector = inject(ChangeDetectorRef);
-  #destroyRef = inject(DestroyRef);
-
-  deleteProduct() {
-    this.#productsService
-      .deleteProduct(this.product().id!)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe(() => this.deleted.emit());
-  }
-
   #productsService = inject(ProductsService);
+  #destroyRef = inject(DestroyRef);
+  #changeDetector = inject(ChangeDetectorRef);
 
   changeRating(rating: number) {
     const oldRating = this.product().rating; // Guardamos puntuación actual
@@ -57,5 +35,12 @@ export class ProductItem {
           this.#changeDetector.markForCheck(); // Detectar cambio
         },
       });
+  }
+
+  deleteProduct() {
+    this.#productsService
+      .deleteProduct(this.product().id!)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe(() => this.deleted.emit());
   }
 }

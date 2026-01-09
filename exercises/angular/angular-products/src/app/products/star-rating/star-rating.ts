@@ -1,10 +1,9 @@
-import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, linkedSignal, model } from '@angular/core';
 
 @Component({
   selector: 'star-rating',
   standalone: true,
-  imports: [NgClass],
+  imports: [],
   templateUrl: './star-rating.html',
   styleUrl: './star-rating.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
