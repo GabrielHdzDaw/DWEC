@@ -12,6 +12,7 @@ import {
 import { provideHttpClient } from '@angular/common/http';
 
 import { routes } from './app.routes';
+import { provideGoogleId } from './shared/google/google-login.config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,5 +20,6 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes, withComponentInputBinding(), withPreloading(PreloadAllModules)),
     provideHttpClient(),
+    provideGoogleId('36873005527-stf5qf8ujk6u2morc7dc6sditq70hr4c.apps.googleusercontent.com'),
   ],
 };
